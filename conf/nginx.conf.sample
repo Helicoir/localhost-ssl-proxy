@@ -1,0 +1,39 @@
+server {
+    listen 80;
+    server_name hoge.local-dev.com;
+
+    return 301 https://hoge.local-dev.com;
+}
+server {
+    listen 80;
+    server_name fuga.local-dev.com;
+
+    return 301 https://fuga.local-dev.com;
+}
+
+
+server {
+    listen 443 ssl;
+    server_name hoge.local-dev.com;
+
+    ssl on;
+    ssl_certificate /etc/nginx/certs/local-dev.com/server.crt;
+    ssl_certificate_key /etc/nginx/certs/local-dev.com/server.key;
+ 
+    location / {
+      proxy_pass http://host.docker.internal:3000;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name fuga.local-dev.com;
+
+    ssl on;
+    ssl_certificate /etc/nginx/certs/local-dev.com/server.crt;
+    ssl_certificate_key /etc/nginx/certs/local-dev.com/server.key;
+ 
+    location / {
+      proxy_pass http://host.docker.internal:4566;
+    }
+}
